@@ -541,8 +541,8 @@ void TriangularShellForceField<DataTypes>::computeRotation(Transformation& R, co
 template <class DataTypes>
 void TriangularShellForceField<DataTypes>::computeMaterialStiffness()
 {
-    Real E = d_youngModulus.getValue()[0],
-        nu = d_poissonRatio.getValue()[0],
+    Real E = getYoungModulusInElement(0),
+        nu = getPoissonRatioInElement(0),
         t = d_thickness.getValue();
 
     materialMatrix[0][0] = 1.0;
@@ -1129,25 +1129,25 @@ void TriangularShellForceField<DataTypes>::andesTemplate(StiffnessMatrix &K, con
 template <class DataTypes>
 void TriangularShellForceField<DataTypes>::computeStiffnessMatrixAll3I(StiffnessMatrix &K, TriangleInformation &tinfo)
 {
-    return andesTemplate(K, tinfo, 1.0, AndesBeta(4.0/9.0, 1.0/12.0, 5.0/12.0, 1.0/2.0, 0.0, 1.0/3.0, -1.0/3.0, -1.0/12.0, -1.0/2.0, -5.0/12.0));
+    return andesTemplate(K, tinfo, 1.0, AndesBeta{4.0/9.0, 1.0/12.0, 5.0/12.0, 1.0/2.0, 0.0, 1.0/3.0, -1.0/3.0, -1.0/12.0, -1.0/2.0, -5.0/12.0});
 }
 
 template <class DataTypes>
 void TriangularShellForceField<DataTypes>::computeStiffnessMatrixAll3M(StiffnessMatrix &K, TriangleInformation &tinfo)
 {
-    return andesTemplate(K, tinfo, 1.0, AndesBeta(4.0/9.0, 1.0/4.0, 5.0/4.0, 3.0/2.0, 0.0, 1.0, -1.0, -1.0/4.0, -3.0/2.0, -5.0/4.0));
+    return andesTemplate(K, tinfo, 1.0, AndesBeta{4.0/9.0, 1.0/4.0, 5.0/4.0, 3.0/2.0, 0.0, 1.0, -1.0, -1.0/4.0, -3.0/2.0, -5.0/4.0});
 }
 
 template <class DataTypes>
 void TriangularShellForceField<DataTypes>::computeStiffnessMatrixAllLS(StiffnessMatrix &K, TriangleInformation &tinfo)
 {
-    return andesTemplate(K, tinfo, 1.0, AndesBeta(4.0/9.0, 3.0/20.0, 3.0/4.0, 9.0/10.0, 0.0, 3.0/5.0, -3.0/5.0, -3.0/20.0, -9.0/10.0, -3.0/4.0));
+    return andesTemplate(K, tinfo, 1.0, AndesBeta{4.0/9.0, 3.0/20.0, 3.0/4.0, 9.0/10.0, 0.0, 3.0/5.0, -3.0/5.0, -3.0/20.0, -9.0/10.0, -3.0/4.0});
 }
 
 template <class DataTypes>
 void TriangularShellForceField<DataTypes>::computeStiffnessMatrixLSTRet(StiffnessMatrix &K, TriangleInformation &tinfo)
 {
-    return andesTemplate(K, tinfo, 4.0/3.0, AndesBeta(1.0/2.0, 2.0/3.0, -2.0/3.0, 0.0, 0.0, -4.0/3.0, 4.0/3.0, -2.0/3.0, 0.0, 2.0/3.0));
+    return andesTemplate(K, tinfo, 4.0/3.0, AndesBeta{1.0/2.0, 2.0/3.0, -2.0/3.0, 0.0, 0.0, -4.0/3.0, 4.0/3.0, -2.0/3.0, 0.0, 2.0/3.0});
 }
 
 // Optimal ANDES membrane element
@@ -1155,7 +1155,7 @@ void TriangularShellForceField<DataTypes>::computeStiffnessMatrixLSTRet(Stiffnes
 template <class DataTypes>
 void TriangularShellForceField<DataTypes>::computeStiffnessMatrixAndesOpt(StiffnessMatrix &K, TriangleInformation &tinfo)
 {
-    Real poissonRatio = d_poissonRatio.getValue()[0];
+    Real poissonRatio = getPoissonRatioInElement(0);
     Real beta0 = helper::rmax(0.5 - 2.0 * poissonRatio * poissonRatio, 0.01);
     return andesTemplate(K, tinfo, 3.0/2.0, AndesBeta{beta0, 1.0, 2.0, 1.0, 0.0, 1.0, -1.0, -1.0, -1.0, -2.0});
 }

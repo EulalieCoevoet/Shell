@@ -206,8 +206,8 @@ public:
 
         sofa::core::topology::BaseMeshTopology* getTopology() {return _topology;}
 
-        using BaseLinearElasticityFEMForceField<DataTypes>::d_youngModulus;
-        using BaseLinearElasticityFEMForceField<DataTypes>::d_poissonRatio;
+        using BaseLinearElasticityFEMForceField<DataTypes>::getYoungModulusInElement;
+        using BaseLinearElasticityFEMForceField<DataTypes>::getPoissonRatioInElement;
 
         Data <Real> d_thickness;
         Data <sofa::helper::OptionsGroup> d_membraneElement;
